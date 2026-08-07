@@ -1,16 +1,37 @@
-# iHatePDF Android library
+# iHatePDF Android Library
 
-Offline Android library chuyển đổi PDF ↔ Word, không gọi server và không tạo watermark.
+Thư viện Android chuyển đổi PDF ↔ Word hoàn toàn offline, không gọi server và không tạo watermark.
 
-## Chạy sample
+[![JitPack](https://jitpack.io/v/chi2911ks/iHatePDF.svg)](https://jitpack.io/#chi2911ks/iHatePDF)
 
-```powershell
-.\gradlew.bat :app:assembleDebug
+## Cài đặt
+
+Thêm JitPack vào `settings.gradle.kts`:
+
+```kotlin
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url = uri("https://jitpack.io")
+            content { includeGroup("com.github.chi2911ks.iHatePDF") }
+        }
+    }
+}
 ```
 
-APK: `app/build/outputs/apk/debug/app-debug.apk`.
+Thêm dependency:
 
-## Dùng trong project này
+```kotlin
+dependencies {
+    implementation("com.github.chi2911ks.iHatePDF:pdf-word-converter:v1.0.0")
+}
+```
+
+Yêu cầu `minSdk 26`. OCR ML Kit được tải như dependency của thư viện và chạy offline trên thiết bị.
+
+## Sử dụng
 
 ```kotlin
 val converter = AndroidDocumentConverter(context)
@@ -20,7 +41,7 @@ val editable = converter.pdfToDocx(
     outputDocxUri,
     PdfToDocxOptions(
         mode = PdfToDocxMode.EDITABLE,
-        preservePageGraphics = true, // lớp trong suốt chỉ chứa image/vector/paint, không chứa text
+        preservePageGraphics = true,
     ),
 )
 
@@ -33,20 +54,28 @@ val visual = converter.pdfToDocx(
 val pdf = converter.wordToPdf(inputWordUri, outputPdfUri)
 ```
 
-Gọi API từ coroutine/worker ngoài main thread. `EDITABLE` dùng PDFBox để lấy text/font và vẽ image/vector/path/paint vào một PNG trong suốt không chứa text, PDFium/PdfRenderer để phân loại-render, ML Kit cho trang scan và Apache POI để tạo rồi verify DOCX. Graphics layer được ghi bằng DrawingML floating anchor tại gốc trang; mặc định không chụp toàn bộ trang và không lặp chữ. Đặt `preservePageGraphics = false` nếu chỉ cần text/table và muốn DOCX nhẹ hơn. `VISUAL` giữ hình trang tốt hơn nhưng trang là ảnh. Input Word hỗ trợ `.docx` và `.doc`.
+Gọi API từ coroutine hoặc worker ngoài main thread.
 
-## Yêu cầu
+- `EDITABLE`: dùng PDFBox lấy text/font/toạ độ và giữ image/vector/paint bằng graphics layer.
+- `VISUAL`: giữ giao diện trang tốt hơn nhưng nội dung trang là ảnh.
+- Word input hỗ trợ `.docx` và `.doc`.
+- Scan PDF được OCR bằng ML Kit.
 
-- Android minSdk 26, compileSdk 37.
-- Storage Access Framework `Uri` đọc/ghi được.
-- Tối đa mặc định 300 trang; Word input tối đa 100 MB.
-- OCR ML Kit được bundle trong APK và chạy offline.
+## Build và publish local
+
+```powershell
+.\gradlew.bat :poi-source-engine:publishToMavenLocal `
+  :offline-document-engine:publishToMavenLocal `
+  :pdf-word-converter:publishToMavenLocal -x test
+```
+
+JitPack dùng [jitpack.yml](jitpack.yml) để tạo ba artifact. Artifact public dành cho người dùng là `pdf-word-converter`; hai engine còn lại được kéo tự động qua POM.
 
 ## Kiểm thử
 
 ```powershell
-.\gradlew.bat :pdf-word-converter:testDebugUnitTest :pdf-word-converter:lintDebug
+.\gradlew.bat :pdf-word-converter:testDebugUnitTest
 .\gradlew.bat :pdf-word-converter:connectedDebugAndroidTest
 ```
 
-Xem phạm vi, fidelity và roadmap production tại [docs/PDF_WORD_ANDROID_LIBRARY_PLAN.md](docs/PDF_WORD_ANDROID_LIBRARY_PLAN.md). Nghĩa vụ dependency nằm trong [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Xem phạm vi và roadmap tại [PDF_WORD_ANDROID_LIBRARY_PLAN.md](docs/PDF_WORD_ANDROID_LIBRARY_PLAN.md). Nghĩa vụ dependency nằm trong [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

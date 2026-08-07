@@ -1,5 +1,6 @@
 plugins {
     `java-library`
+    `maven-publish`
 }
 
 java {
@@ -60,4 +61,33 @@ tasks.processResources {
     // Upstream subprojects provide overlapping ServiceLoader descriptors.
     // The converter does not use POI's generic extractor discovery.
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.jar {
+    // File dependencies are not representable in a Maven POM. Bundle the
+    // vendored transitive/generated JARs so JitPack consumers get one
+    // self-contained POI engine artifact.
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from(configurations.runtimeClasspath.get().map { dependency ->
+        if (dependency.isDirectory) dependency else zipTree(dependency)
+    })
+    exclude("META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA")
+}
+
+java {
+    withSourcesJar()
+}
+
+tasks.named<Jar>("sourcesJar") {
+    dependsOn(syncPoiSources)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+            artifactId = "poi-source-engine"
+        }
+    }
 }

@@ -1,0 +1,4 @@
+jdk:
+  - openjdk21
+install:
+  - ./gradlew :poi-source-engine:publishToMavenLocal :offline-document-engine:publishToMavenLocal :pdf-word-converter:publishToMavenLocal -x test --no-daemon
