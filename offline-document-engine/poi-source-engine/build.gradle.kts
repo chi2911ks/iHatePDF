@@ -43,12 +43,29 @@ val syncPoiSources by tasks.registering(Sync::class) {
 }
 
 dependencies {
-    // poi-ooxml-lite is generated from XML schemas during the upstream release build;
-    // the generated Java sources are not stored in the POI Git repository.
-    api(fileTree("../libs") {
-        include("*.jar")
-        exclude("poi-5.5.1.jar", "poi-ooxml-5.5.1.jar", "poi-scratchpad-5.5.1.jar")
-    })
+    if (System.getenv("JITPACK") == "true") {
+        // Public coordinates are emitted into the JitPack POM/module metadata.
+        api("org.apache.poi:poi-ooxml-lite:5.5.1")
+        api("org.apache.xmlbeans:xmlbeans:5.3.0")
+        api("org.apache.commons:commons-collections4:4.5.0")
+        api("org.apache.commons:commons-compress:1.28.0")
+        api("commons-io:commons-io:2.21.0")
+        api("commons-codec:commons-codec:1.20.0")
+        api("org.apache.commons:commons-lang3:3.18.0")
+        api("org.apache.commons:commons-math3:3.6.1")
+        api("org.apache.logging.log4j:log4j-api:2.24.3")
+        api("com.zaxxer:SparseBitSet:1.3")
+        api("com.github.virtuald:curvesapi:1.08")
+        api("org.bouncycastle:bcprov-jdk15to18:1.72")
+        api("org.bouncycastle:bcpkix-jdk15to18:1.72")
+        api("org.bouncycastle:bcutil-jdk15to18:1.72")
+    } else {
+        // Offline repository builds use the pinned local copies.
+        api(fileTree("../libs") {
+            include("*.jar")
+            exclude("poi-5.5.1.jar", "poi-ooxml-5.5.1.jar", "poi-scratchpad-5.5.1.jar")
+        })
+    }
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -61,17 +78,6 @@ tasks.processResources {
     // Upstream subprojects provide overlapping ServiceLoader descriptors.
     // The converter does not use POI's generic extractor discovery.
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
-tasks.jar {
-    // File dependencies are not representable in a Maven POM. Bundle the
-    // vendored transitive/generated JARs so JitPack consumers get one
-    // self-contained POI engine artifact.
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    from(configurations.runtimeClasspath.get().map { dependency ->
-        if (dependency.isDirectory) dependency else zipTree(dependency)
-    })
-    exclude("META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA")
 }
 
 java {

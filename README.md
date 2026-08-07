@@ -25,7 +25,7 @@ Thêm dependency:
 
 ```kotlin
 dependencies {
-    implementation("com.github.chi2911ks.iHatePDF:pdf-word-converter:v1.0.0")
+    implementation("com.github.chi2911ks.iHatePDF:pdf-word-converter:v1.0.1")
 }
 ```
 
