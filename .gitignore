@@ -28,6 +28,7 @@ Thumbs.db
 *.aab
 *.docx
 *.pdf
+/app/release/
 
 # Temporary source extraction used while patching PDFBox
 /com/
