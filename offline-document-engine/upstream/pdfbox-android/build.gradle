@@ -1,0 +1,33 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+defaultTasks 'clean','build','connectedCheck'
+
+buildscript {
+    repositories {
+        mavenCentral()
+        google()
+        jcenter() // jp2-android
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.3.1'
+    }
+}
+
+allprojects {
+    version = VERSION_NAME
+
+    repositories {
+//        Enable downloading snapshot versions
+//        maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
+        mavenCentral()
+        google()
+        jcenter()
+    }
+
+//    Show more warnings if desired
+//    gradle.projectsEvaluated {
+//        tasks.withType(JavaCompile) {
+//            options.encoding = 'UTF-8'
+//            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+//        }
+//    }
+}

@@ -1,0 +1,38 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdk = 30
+    namespace = "com.gemalto.jp2.test"
+
+    defaultConfig {
+        applicationId "com.gemalto.openjpeg.test"
+        minSdk 16
+        targetSdk 30
+        versionCode 1
+        versionName "1.0"
+    }
+
+    signingConfigs {
+        release {
+            //TODO update the path to your keystore and the related variables
+            if (project.hasProperty('defaultKeyStoreFile')) storeFile file(defaultKeyStoreFile)
+            if (project.hasProperty('defaultKeyStorePassword')) storePassword defaultKeyStorePassword
+            if (project.hasProperty('defaultKeyAlias')) keyAlias defaultKeyAlias
+            if (project.hasProperty('defaultKeyPassword')) keyPassword defaultKeyPassword
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':jp2-android')
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+}

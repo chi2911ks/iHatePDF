@@ -1,15 +1,33 @@
+# Gradle
+.gradle/
+**/build/
+
+# Android Studio / local machine
+.idea/
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
 local.properties
+captures/
+.externalNativeBuild/
+**/.cxx/
+
+# Native build output
+*.so
+*.o
+*.obj
+*.a
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.tmp
+
+# Logs and generated documents
+*.log
+*.apk
+*.aab
+*.docx
+*.pdf
+
+# Temporary source extraction used while patching PDFBox
+/com/

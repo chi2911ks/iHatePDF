@@ -1,0 +1,55 @@
+plugins {
+    id 'com.android.library'
+}
+
+android {
+    namespace 'com.ihatepdf.offlineengine'
+    compileSdk 37
+
+    defaultConfig { minSdk 26 }
+    externalNativeBuild {
+        cmake {
+            path file('upstream/jp2-android/library/CMakeLists.txt')
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    sourceSets {
+        main {
+            java.srcDir 'upstream/pdfbox-android/library/src/main/java'
+            java.srcDir 'upstream/jp2-android/library/src/main/java'
+            assets.srcDir 'upstream/pdfbox-android/library/src/main/assets'
+        }
+    }
+}
+
+configurations {
+    vendorDownload {
+        canBeConsumed = false
+        canBeResolved = true
+        exclude group: 'com.google.android.gms'
+        exclude group: 'com.google.mlkit'
+        exclude group: 'com.google.firebase'
+        exclude group: 'androidx.annotation'
+    }
+}
+
+dependencies {
+    api project(':poi-source-engine')
+    compileOnly 'androidx.annotation:annotation:1.9.1'
+
+    vendorDownload libs.pdfbox.android
+    vendorDownload libs.apache.poi.ooxml
+    vendorDownload libs.apache.poi.scratchpad
+}
+
+tasks.register('syncVendoredLibraries', Sync) {
+    group = 'vendor'
+    description = 'Downloads transitive/generated non-Google artifacts into libs/.'
+    from configurations.vendorDownload
+    into layout.projectDirectory.dir('libs')
+    include '*.jar', '*.aar'
+    exclude 'pdfbox-android-*.aar', 'poi-5.5.1.jar', 'poi-ooxml-5.5.1.jar', 'poi-scratchpad-5.5.1.jar'
+}
