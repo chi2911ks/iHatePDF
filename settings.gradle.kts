@@ -25,7 +25,4 @@ dependencyResolutionManagement {
 rootProject.name = "iHatePDF"
 include(":app")
 include(":pdf-word-converter")
-include(":offline-document-engine")
-include(":poi-source-engine")
-project(":poi-source-engine").projectDir = file("offline-document-engine/poi-source-engine")
  

@@ -13,6 +13,7 @@ coroutines = "1.10.2"
 mlkitTextRecognition = "16.0.1"
 pdfboxAndroid = "2.0.27.0"
 apachePoi = "5.5.1"
+jp2Android = "1.0.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -35,6 +36,7 @@ mlkit-text-recognition = { group = "com.google.mlkit", name = "text-recognition"
 pdfbox-android = { group = "com.tom-roush", name = "pdfbox-android", version.ref = "pdfboxAndroid" }
 apache-poi-ooxml = { group = "org.apache.poi", name = "poi-ooxml", version.ref = "apachePoi" }
 apache-poi-scratchpad = { group = "org.apache.poi", name = "poi-scratchpad", version.ref = "apachePoi" }
+jp2-android = { group = "io.github.michaldvorak-gemalto", name = "jp2-android", version.ref = "jp2Android" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

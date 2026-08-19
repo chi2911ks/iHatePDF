@@ -50,7 +50,10 @@ afterEvaluate {
 dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.mlkit.text.recognition)
-    implementation(project(":offline-document-engine"))
+    implementation(libs.apache.poi.ooxml)
+    implementation(libs.apache.poi.scratchpad)
+    implementation(libs.pdfbox.android)
+    implementation(libs.jp2.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.test.runner)
