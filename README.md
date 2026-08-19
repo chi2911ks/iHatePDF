@@ -25,7 +25,7 @@ Thêm dependency:
 
 ```kotlin
 dependencies {
-    implementation("com.github.chi2911ks.iHatePDF:pdf-word-converter:v1.0.4")
+    implementation("com.github.chi2911ks:iHatePDF:v1.0.4")
 }
 ```
 
@@ -67,7 +67,7 @@ Gọi API từ coroutine hoặc worker ngoài main thread.
 .\gradlew.bat :pdf-word-converter:publishToMavenLocal -x test
 ```
 
-JitPack dùng [jitpack.yml](jitpack.yml) để publish artifact `pdf-word-converter`; Apache POI, PdfBox-Android và JP2ForAndroid được kéo tự động qua POM.
+JitPack dùng [jitpack.yml](jitpack.yml) để publish module `pdf-word-converter` thành artifact `com.github.chi2911ks:iHatePDF`; Apache POI, PdfBox-Android và JP2ForAndroid được kéo tự động qua POM.
 
 ## Kiểm thử
 
